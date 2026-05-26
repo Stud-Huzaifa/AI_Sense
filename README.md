@@ -1,46 +1,45 @@
-Here’s a polished GitHub README you can use for the project:
-
-```md
 # AirSense AI
 
 **AirSense AI** is a full-stack air pollution intelligence platform that monitors real-time AQI, visualizes pollutant trends, predicts future air quality, and generates health-focused recommendations for safer daily decisions.
 
-It combines a modern **React dashboard**, a **FastAPI backend**, persistent **SQLite storage**, live **WAQI API integration**, and a machine-learning AQI prediction pipeline built with **Scikit-learn**.
+It combines a modern **React dashboard**, a **FastAPI backend**, persistent **SQLite storage**, live **WAQI API integration**, and a machine learning AQI prediction pipeline built with **Scikit-learn**.
 
 ---
 
-## Overview
+# Overview
 
-Air pollution data is often difficult to understand when presented as raw numbers. AirSense AI turns AQI readings into a practical smart-city style experience where users can:
+Air pollution data is often difficult to understand when presented as raw numbers. AirSense AI transforms AQI readings into a practical smart-city experience where users can:
 
 - Monitor current AQI and pollutant levels
-- Understand health risk based on AQI category
+- Understand health risks based on AQI categories
 - View historical pollution trends
 - Compare pollutant concentrations
 - Predict future AQI using machine learning
-- Explore city air quality on a map
+- Explore city air quality on an interactive map
 - Receive profile-based health guidance
 - Ask an AQI-aware assistant for recommendations
 
-The project is designed for academic demonstration, portfolio presentation, and local full-stack development.
+The project is designed for academic demonstrations, portfolio showcases, and full-stack development practice.
 
 ---
 
-## Key Features
+# Key Features
 
-### Real-Time AQI Dashboard
+## Real-Time AQI Dashboard
 
-The dashboard displays current air quality data including:
+The dashboard displays live air quality information, including:
 
 - AQI value
 - AQI category
 - Health risk level
-- PM2.5, PM10, CO, NO2, SO2, and O3
+- PM2.5, PM10, CO, NO2, SO2, and O3 levels
 - Temperature, humidity, and wind speed
-- Last updated time
-- Health recommendation
+- Last updated timestamp
+- Health recommendations
 
-### Live WAQI API Support
+---
+
+## Live WAQI API Integration
 
 AirSense AI supports live air quality readings using the World Air Quality Index API.
 
@@ -49,35 +48,51 @@ DEMO_MODE=false
 WAQI_TOKEN=your_waqi_token_here
 ```
 
-When live mode is enabled, the backend fetches WAQI data, normalizes it, stores it in the database, and serves it to the frontend.
+When live mode is enabled, the backend:
 
-### Demo Mode
+1. Fetches AQI data from WAQI
+2. Normalizes the response
+3. Stores readings in SQLite
+4. Serves processed data to the frontend
 
-The app also supports generated demo data, allowing the entire system to run without an external API key.
+---
+
+## Demo Mode
+
+The platform also supports generated demo data, allowing the complete system to run without an external API key.
 
 ```env
 DEMO_MODE=true
 ```
 
-This is useful for testing, presentations, and offline development.
+This is useful for:
 
-### AQI History and Trends
+- Offline development
+- Testing
+- Academic presentations
+- UI demonstrations
 
-Historical readings are saved in SQLite and displayed through charts and tables.
+---
 
-The history page includes:
+## AQI History & Trends
+
+Historical readings are stored in SQLite and visualized using charts and tables.
+
+The history section includes:
 
 - Highest AQI
 - Lowest AQI
 - Average AQI
-- Hourly trend visualization
-- Recent AQI readings
+- Hourly AQI trends
+- Recent pollution readings
 
-### Machine Learning Prediction
+---
 
-AirSense AI includes a Random Forest based AQI prediction pipeline.
+## Machine Learning AQI Prediction
 
-The model uses:
+AirSense AI includes a **Random Forest-based AQI prediction pipeline**.
+
+The prediction model uses:
 
 - Previous AQI values
 - AQI lag features
@@ -85,28 +100,34 @@ The model uses:
 - Weather conditions
 - Time-based features
 
-If a trained model artifact is available, predictions use the saved Joblib model. If not, the system falls back to a transparent heuristic so the prediction feature remains usable.
+If a trained model artifact exists, predictions are generated using the saved Joblib model. Otherwise, the system falls back to a transparent heuristic prediction method.
 
-### Health Risk Alerts
+---
 
-The backend applies AQI classification rules to generate profile-aware health advice for:
+## Health Risk Alerts
+
+The backend applies AQI classification rules to generate profile-aware health recommendations for:
 
 - General users
 - Children
-- Elderly users
+- Elderly individuals
 - Asthma-sensitive users
 - Outdoor workers
-- Runners and active users
+- Athletes and runners
 
-### Pollution Map
+---
 
-The map page uses Leaflet to display AQI-aware city markers with color-coded pollution levels.
+## Pollution Map
 
-### AQI Assistant
+The map page uses **Leaflet** to display AQI-aware city markers with color-coded pollution severity indicators.
 
-The built-in assistant answers air-quality questions using current AQI, pollutant levels, and health recommendation rules.
+---
 
-Example questions:
+## AQI Assistant
+
+The built-in assistant answers air-quality-related questions using current AQI values, pollutant levels, and health recommendation logic.
+
+### Example Questions
 
 - “Is it safe to go outside today?”
 - “Should asthma patients avoid outdoor activity?”
@@ -115,9 +136,9 @@ Example questions:
 
 ---
 
-## Tech Stack
+# Tech Stack
 
-### Frontend
+## Frontend
 
 - React
 - Vite
@@ -128,7 +149,7 @@ Example questions:
 - Lucide React
 - CSS
 
-### Backend
+## Backend
 
 - Python
 - FastAPI
@@ -138,80 +159,85 @@ Example questions:
 - Pydantic
 - HTTPX
 
-### Machine Learning
+## Machine Learning
 
 - Pandas
 - NumPy
 - Scikit-learn
 - Joblib
 
-### Deployment and Tooling
+## Deployment & Tooling
 
 - Docker
 - Docker Compose
-- Environment variables
-- PowerShell development runner
+- Environment Variables
+- PowerShell Development Runner
 
 ---
 
-## Project Structure
+# Project Structure
 
 ```text
 airsense-ai/
-|-- backend/
-|   |-- app/
-|   |   |-- api/routes/
-|   |   |-- core/
-|   |   |-- db/
-|   |   |-- ml/
-|   |   |-- models/
-|   |   |-- schemas/
-|   |   |-- scripts/
-|   |   |-- services/
-|   |   `-- main.py
-|   |-- artifacts/
-|   |-- requirements.txt
-|   `-- Dockerfile
-|
-|-- frontend/
-|   |-- src/
-|   |   |-- api/
-|   |   |-- components/
-|   |   |-- pages/
-|   |   |-- App.jsx
-|   |   `-- styles.css
-|   |-- package.json
-|   `-- Dockerfile
-|
-|-- docs/
-|-- docker-compose.yml
-|-- start-dev.ps1
-|-- start-dev.bat
-|-- .env.example
-`-- README.md
+│
+├── backend/
+│   ├── app/
+│   │   ├── api/routes/
+│   │   ├── core/
+│   │   ├── db/
+│   │   ├── ml/
+│   │   ├── models/
+│   │   ├── schemas/
+│   │   ├── scripts/
+│   │   ├── services/
+│   │   └── main.py
+│   │
+│   ├── artifacts/
+│   ├── requirements.txt
+│   └── Dockerfile
+│
+├── frontend/
+│   ├── src/
+│   │   ├── api/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── App.jsx
+│   │   └── styles.css
+│   │
+│   ├── package.json
+│   └── Dockerfile
+│
+├── docs/
+├── docker-compose.yml
+├── start-dev.ps1
+├── start-dev.bat
+├── .env.example
+└── README.md
 ```
 
 ---
 
-## Getting Started
+# Getting Started
 
-### 1. Clone the Repository
+## 1. Clone the Repository
 
 ```bash
 git clone https://github.com/your-username/airsense-ai.git
 cd airsense-ai
 ```
 
-### 2. Configure Environment Variables
+---
 
-Create environment files from the example file.
+## 2. Configure Environment Variables
+
+Create environment files from the example configuration:
 
 ```bash
 cp .env.example .env
 cp .env.example backend/.env
 ```
 
-Example configuration:
+### Example Configuration
 
 ```env
 APP_NAME=AirSense AI
@@ -224,63 +250,73 @@ CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 VITE_API_BASE_URL=http://localhost:8000
 ```
 
-For live WAQI data:
+### For Live WAQI Data
 
 ```env
 DEMO_MODE=false
 WAQI_TOKEN=your_waqi_token_here
 ```
 
-Do not commit your real API token to GitHub.
+> Do not commit your real API token to GitHub.
 
 ---
 
-## Run Locally
+# Run Locally
 
-### Option 1: Start Backend and Frontend Together
+## Option 1 — Start Backend & Frontend Together
 
-On Windows PowerShell:
+### Windows PowerShell
 
 ```powershell
 .\start-dev.ps1
 ```
 
-To install dependencies first:
+### Install Dependencies Automatically
 
 ```powershell
 .\start-dev.ps1 -Install
 ```
 
-If PowerShell script execution is blocked:
+### If PowerShell Execution Is Blocked
 
 ```bat
 start-dev.bat
 ```
 
-The app will run at:
+---
 
-- Frontend: `http://localhost:5173`
-- Backend: `http://127.0.0.1:8000`
-- API Docs: `http://127.0.0.1:8000/docs`
+## Application URLs
+
+| Service | URL |
+|---|---|
+| Frontend | `http://localhost:5173` |
+| Backend | `http://127.0.0.1:8000` |
+| API Docs | `http://127.0.0.1:8000/docs` |
 
 ---
 
-## Manual Setup
+# Manual Setup
 
-### Backend
+## Backend
 
 ```bash
 cd backend
+
 pip install -r requirements.txt
+
 python -m app.scripts.seed_demo_data
 python -m app.scripts.train_model
+
 uvicorn app.main:app --reload
 ```
 
-### Frontend
+---
+
+## Frontend
 
 ```bash
 cd frontend
+
 npm install
 npm run dev
 ```
@@ -293,7 +329,7 @@ http://localhost:5173
 
 ---
 
-## API Endpoints
+# API Endpoints
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -307,7 +343,7 @@ http://localhost:5173
 | GET | `/locations` | Get saved locations |
 | POST | `/locations` | Add a location |
 
-Interactive API documentation is available at:
+Interactive API documentation:
 
 ```text
 http://localhost:8000/docs
@@ -315,11 +351,11 @@ http://localhost:8000/docs
 
 ---
 
-## Machine Learning Pipeline
+# Machine Learning Pipeline
 
-The prediction system uses historical readings and engineered features to estimate future AQI.
+The prediction system uses historical AQI readings and engineered features to estimate future AQI.
 
-Features include:
+## Features Used
 
 - `previous_aqi`
 - `aqi_lag_1`
@@ -338,14 +374,16 @@ Features include:
 - `day`
 - `month`
 
-Train the model with:
+---
+
+## Train the Model
 
 ```bash
 cd backend
 python -m app.scripts.train_model
 ```
 
-The trained model is saved as:
+The trained model artifact is stored at:
 
 ```text
 backend/artifacts/aqi_model.joblib
@@ -353,9 +391,9 @@ backend/artifacts/aqi_model.joblib
 
 ---
 
-## Docker
+# Docker Support
 
-Run the full project with Docker Compose:
+Run the complete application using Docker Compose:
 
 ```bash
 docker compose up --build
@@ -363,9 +401,9 @@ docker compose up --build
 
 ---
 
-## Screenshots
+# Screenshots
 
-Add screenshots here after running the project.
+Add screenshots after running the project.
 
 ```md
 ![Dashboard](screenshots/dashboard.png)
@@ -377,50 +415,53 @@ Add screenshots here after running the project.
 
 ---
 
-## Use Cases
+# Use Cases
 
-AirSense AI can be useful for:
+AirSense AI can be used for:
 
-- Smart city pollution monitoring
+- Smart-city pollution monitoring
 - Environmental analytics dashboards
 - Academic final-year projects
 - AQI forecasting demonstrations
-- Health-risk awareness tools
+- Health-risk awareness systems
 - Full-stack portfolio projects
 - Machine learning integration practice
 
 ---
 
-## Limitations
+# Limitations
 
-- WAQI live data depends on available monitoring stations for each city.
-- Some cities may have delayed or unavailable live station readings.
+- WAQI live data depends on available monitoring stations.
+- Some cities may have delayed or unavailable AQI readings.
 - Demo mode uses synthetic but realistic AQI data.
-- SQLite is suitable for local development, not large-scale production.
+- SQLite is intended for local development, not large-scale production.
 - The assistant is rule-based and does not use a generative AI model by default.
 
 ---
 
-## Future Improvements
+# Future Improvements
 
-- Add authentication and user accounts
-- Add saved user health profiles
-- Add scheduled background AQI ingestion
-- Add PostgreSQL support for production
-- Add notification alerts
-- Add model monitoring and retraining
-- Add OpenAI, Gemini, or RAG-powered assistant mode
-- Add deployment support for cloud platforms
-
----
-
-## Author
-
-Developed by **Huzaifa** as a full-stack AI and environmental intelligence project.
+- User authentication and accounts
+- Saved user health profiles
+- Scheduled AQI ingestion jobs
+- PostgreSQL support for production
+- Push notifications and alerts
+- Model monitoring and retraining
+- OpenAI, Gemini, or RAG-powered assistant integration
+- Cloud deployment support
 
 ---
 
-## License
+# Author
 
-This project is open for learning, academic use, and portfolio demonstration.
-```
+Developed by **Huzaifa** as a full-stack AI and environmental intelligence platform.
+
+---
+
+# License
+
+This project is intended for:
+
+- Learning
+- Academic use
+- Portfolio demonstrations
