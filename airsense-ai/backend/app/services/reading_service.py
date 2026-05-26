@@ -57,6 +57,9 @@ def get_latest_reading(db: Session, city: str) -> AirQualityReading | None:
 
 
 def get_current_reading(db: Session, city: str) -> AirQualityReading:
+    if not get_settings().demo_mode:
+        return fetch_and_save_current(db, city)
+
     latest = get_latest_reading(db, city)
     if latest and latest.recorded_at >= datetime.utcnow() - timedelta(minutes=45):
         return latest

@@ -19,6 +19,7 @@ def fetch_city_aqi(city: str) -> dict:
     if not settings.waqi_token:
         raise ValueError("WAQI_TOKEN is required when DEMO_MODE=false")
 
+    fetched_at = datetime.utcnow()
     url = f"https://api.waqi.info/feed/{city}/"
     try:
         response = httpx.get(url, params={"token": settings.waqi_token}, timeout=12, verify=certifi.where())
@@ -35,9 +36,6 @@ def fetch_city_aqi(city: str) -> dict:
     iaqi = data.get("iaqi", {})
     geo = data.get("city", {}).get("geo") or [0, 0]
     city_name = city.strip().title()
-    recorded_raw = data.get("time", {}).get("iso")
-    recorded_at = datetime.fromisoformat(recorded_raw.replace("Z", "+00:00")).replace(tzinfo=None) if recorded_raw else datetime.utcnow()
-
     return {
         "city": city_name,
         "country": data.get("city", {}).get("name", "Unknown"),
@@ -54,5 +52,5 @@ def fetch_city_aqi(city: str) -> dict:
         "humidity": _get_number(iaqi, "h", 55),
         "wind_speed": _get_number(iaqi, "w", 4),
         "source": "waqi",
-        "recorded_at": recorded_at,
+        "recorded_at": fetched_at,
     }

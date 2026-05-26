@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
-from app.ml.predictor import predict_aqi
 from app.schemas.aqi_schema import HistoryResponse, PredictionResponse, ReadingResponse
 from app.services.reading_service import fetch_and_save_current, get_current_reading, get_history, reading_to_dict
 
@@ -43,5 +42,6 @@ def aqi_prediction(
     horizon_hours: int = Query(6, ge=1, le=48),
     db: Session = Depends(get_db),
 ):
-    return predict_aqi(db, city, horizon_hours)
+    from app.ml.predictor import predict_aqi
 
+    return predict_aqi(db, city, horizon_hours)
