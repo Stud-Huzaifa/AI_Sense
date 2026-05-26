@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+dist/
+.env
+backend/airsense.db
+backend/*.log
+backend/artifacts/*.joblib
+!backend/artifacts/.gitkeep
+.logs/

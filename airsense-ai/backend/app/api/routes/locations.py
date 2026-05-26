@@ -1,0 +1,38 @@
+from pydantic import BaseModel, Field
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+
+from app.db.database import get_db
+from app.models.location import Location
+from app.services.reading_service import seed_locations
+
+router = APIRouter(prefix="/locations", tags=["Locations"])
+
+
+class LocationCreate(BaseModel):
+    city: str = Field(..., min_length=2)
+    country: str = "Pakistan"
+    latitude: float
+    longitude: float
+
+
+class LocationResponse(LocationCreate):
+    id: int
+
+    model_config = {"from_attributes": True}
+
+
+@router.get("", response_model=list[LocationResponse])
+def list_locations(db: Session = Depends(get_db)):
+    seed_locations(db)
+    return db.query(Location).order_by(Location.city).all()
+
+
+@router.post("", response_model=LocationResponse)
+def create_location(payload: LocationCreate, db: Session = Depends(get_db)):
+    location = Location(**payload.model_dump())
+    db.add(location)
+    db.commit()
+    db.refresh(location)
+    return location
+
