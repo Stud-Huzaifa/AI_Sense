@@ -32,7 +32,7 @@ services:
     runtime: static
     rootDir: airsense-ai/frontend
     buildCommand: npm ci && npm run build
-    staticPublishPath: dist
+    staticPublishPath: airsense-ai/frontend/dist
     envVars:
       - key: VITE_API_BASE_URL
         value: https://airsense-ai-api.onrender.com

@@ -10,3 +10,4 @@ backend/*.log
 backend/artifacts/*.joblib
 !backend/artifacts/.gitkeep
 .logs/
+.verify-*/
