@@ -1,35 +1,46 @@
-# Render Deployment
+# Simple Render Deployment
 
-This repository includes a root-level `render.yaml` Blueprint for deploying both services:
+This project now deploys as one Render service.
 
-- `airsense-ai-api`: FastAPI backend on Render Web Services.
-- `airsense-ai`: Vite React frontend on Render Static Sites.
-- `airsense-ai-db`: Render Postgres for persistent application data.
+Render builds the React frontend, copies it into the FastAPI backend, and serves everything from one URL.
 
 ## Deploy
 
 1. Push the repository to GitHub.
-2. In Render, choose **New > Blueprint**.
-3. Select the repository and let Render detect `render.yaml` from the repository root.
-4. When prompted, enter `WAQI_TOKEN` or leave it blank.
-5. Deploy the Blueprint.
+2. Open Render.
+3. Click **New > Blueprint**.
+4. Select this repository.
+5. Render detects the root `render.yaml`.
+6. Click **Apply**.
 
-The frontend is configured to call:
+That is it.
 
-```text
-https://airsense-ai-api.onrender.com
+## What Render Creates
+
+- One web service named `airsense-ai`
+- One public URL like `https://airsense-ai.onrender.com`
+
+## Settings
+
+The app runs in demo mode by default:
+
+```env
+DEMO_MODE=true
+DATABASE_URL=sqlite:///./airsense.db
 ```
 
-If Render asks you to rename either service because the default name is unavailable, update these two values after creation:
+No external database and no API token are required.
 
-- Frontend environment variable `VITE_API_BASE_URL`
-- Backend environment variable `CORS_ORIGINS`
+## Check After Deploy
 
-## Runtime Notes
+Open:
 
-- The backend start command binds to Render's `$PORT`.
-- Python is pinned to `3.11.11` for compatibility with the ML dependency set.
-- `/health` is used as the health check endpoint.
-- Demo mode is enabled by default, so the project works without an API token.
-- Set `DEMO_MODE=false` and provide `WAQI_TOKEN` for live WAQI readings.
-- Free Render Postgres instances expire after 30 days. Upgrade the database plan for long-term production storage.
+```text
+https://airsense-ai.onrender.com
+```
+
+Health check:
+
+```text
+https://airsense-ai.onrender.com/health
+```

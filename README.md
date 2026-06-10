@@ -66,13 +66,9 @@ Use `DEMO_MODE=false` with a WAQI token for live air quality data.
 
 ## Deploy on Render
 
-This repo includes a root-level `render.yaml` Blueprint. It creates:
+This repo includes a simple root-level `render.yaml` Blueprint. It creates one Render web service named `airsense-ai`.
 
-- `airsense-ai-api` FastAPI web service
-- `airsense-ai` static frontend
-- `airsense-ai-db` Render Postgres database
-
-The backend is pinned to Python `3.11.11` because Render's current default Python version is newer than this project's ML dependency set.
+The Docker build compiles the React frontend, copies it into FastAPI, and serves the whole app from one URL.
 
 Deploy steps:
 
@@ -80,17 +76,14 @@ Deploy steps:
 2. In Render, choose **New > Blueprint**.
 3. Select the repository.
 4. Let Render detect `render.yaml`.
-5. Provide `WAQI_TOKEN` when prompted, or leave it blank for demo mode.
+5. Click **Apply**.
 
 Default URLs:
 
 ```text
-Frontend: https://airsense-ai.onrender.com
-Backend:  https://airsense-ai-api.onrender.com
-Health:   https://airsense-ai-api.onrender.com/health
+App:    https://airsense-ai.onrender.com
+Health: https://airsense-ai.onrender.com/health
 ```
-
-If Render renames either service, update the frontend `VITE_API_BASE_URL` and backend `CORS_ORIGINS` environment variables.
 
 See [Render deployment docs](airsense-ai/docs/render-deployment.md) for details.
 
