@@ -1,5 +1,5 @@
 from functools import lru_cache
-from os import getenv
+from os import environ, getenv
 from pathlib import Path
 
 
@@ -12,9 +12,7 @@ def _load_env_file() -> None:
         if not line or line.startswith("#") or "=" not in line:
             continue
         key, value = line.split("=", 1)
-        import os
-
-        os.environ[key] = value
+        environ.setdefault(key, value)
 
 
 class Settings:
@@ -22,7 +20,7 @@ class Settings:
         _load_env_file()
         self.app_name = getenv("APP_NAME", "AirSense AI")
         self.app_env = getenv("APP_ENV", "development")
-        self.database_url = getenv("DATABASE_URL", "sqlite:///./airsense.db")
+        self.database_url = self._normalize_database_url(getenv("DATABASE_URL", "sqlite:///./airsense.db"))
         self.demo_mode = getenv("DEMO_MODE", "true").lower() in {"1", "true", "yes", "on"}
         self.waqi_token = getenv("WAQI_TOKEN", "")
         self.secret_key = getenv("SECRET_KEY", "change-me-in-production")
@@ -31,6 +29,12 @@ class Settings:
     @property
     def cors_origin_list(self) -> list[str]:
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+
+    @staticmethod
+    def _normalize_database_url(url: str) -> str:
+        if url.startswith("postgres://"):
+            return url.replace("postgres://", "postgresql://", 1)
+        return url
 
 
 @lru_cache

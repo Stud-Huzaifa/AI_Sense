@@ -159,6 +159,22 @@ The ML pipeline creates lag and time features from AQI readings:
 docker compose up --build
 ```
 
+## Deploy on Render
+
+This repo includes a Render Blueprint at `../render.yaml` for the FastAPI API, React static site, and Render Postgres database.
+
+1. Push the repository to GitHub.
+2. In Render, create a new Blueprint and select this repository.
+3. Leave `WAQI_TOKEN` blank for demo mode, or add a live WAQI token and set `DEMO_MODE=false`.
+
+Default service URLs:
+
+- Frontend: `https://airsense-ai.onrender.com`
+- Backend API: `https://airsense-ai-api.onrender.com`
+- Health check: `https://airsense-ai-api.onrender.com/health`
+
+The backend is pinned to Python `3.11.11` for Render compatibility with the ML stack. If Render renames a service, update `VITE_API_BASE_URL` on the static site and `CORS_ORIGINS` on the backend. See `docs/render-deployment.md`.
+
 ## Screenshots
 
 Add screenshots of the dashboard, history, prediction page, map, alerts, and assistant after running the app locally.

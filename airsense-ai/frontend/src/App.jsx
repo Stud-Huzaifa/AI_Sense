@@ -1,18 +1,20 @@
-import { useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 
 import { askAssistant, getCurrentAqi, getHealthAlert, getHistory, getLocations, getPrediction, refreshAqi } from "./api/client";
 import Layout from "./components/Layout";
-import About from "./pages/About";
-import Alerts from "./pages/Alerts";
-import Assistant from "./pages/Assistant";
-import CityComparison from "./pages/CityComparison";
-import Dashboard from "./pages/Dashboard";
-import History from "./pages/History";
-import Landing from "./pages/Landing";
-import MapPage from "./pages/MapPage";
-import Predictions from "./pages/Predictions";
-import Reports from "./pages/Reports";
-import Settings from "./pages/Settings";
+import LoadingSkeleton from "./components/LoadingSkeleton";
+
+const About = lazy(() => import("./pages/About"));
+const Alerts = lazy(() => import("./pages/Alerts"));
+const Assistant = lazy(() => import("./pages/Assistant"));
+const CityComparison = lazy(() => import("./pages/CityComparison"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const History = lazy(() => import("./pages/History"));
+const Landing = lazy(() => import("./pages/Landing"));
+const MapPage = lazy(() => import("./pages/MapPage"));
+const Predictions = lazy(() => import("./pages/Predictions"));
+const Reports = lazy(() => import("./pages/Reports"));
+const Settings = lazy(() => import("./pages/Settings"));
 
 export default function App() {
   const [page, setPage] = useState("landing");
@@ -109,7 +111,7 @@ export default function App() {
           <span>{error}</span>
         </div>
       )}
-      {pages[page]}
+      <Suspense fallback={<LoadingSkeleton count={6} />}>{pages[page]}</Suspense>
     </Layout>
   );
 }
