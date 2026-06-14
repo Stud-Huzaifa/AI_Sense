@@ -26,6 +26,8 @@ export default function App() {
   const [history, setHistory] = useState(null);
   const [prediction, setPrediction] = useState(null);
   const [alert, setAlert] = useState(null);
+  const [stationReadings, setStationReadings] = useState([]);
+  const [stationLoading, setStationLoading] = useState(false);
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -57,23 +59,50 @@ export default function App() {
 
   useEffect(() => {
     loadCityData(city);
-  }, [city, profile]);
+  }, [city, profile, horizon]);
+
+  useEffect(() => {
+    if (!locations.length || !["map", "comparison"].includes(page)) return;
+
+    const loadStationReadings = async () => {
+      setStationLoading(true);
+      try {
+        const results = await Promise.allSettled(locations.map((location) => getCurrentAqi(location.city)));
+        setStationReadings(
+          results
+            .filter((result) => result.status === "fulfilled")
+            .map((result) => result.value)
+        );
+      } finally {
+        setStationLoading(false);
+      }
+    };
+
+    loadStationReadings();
+  }, [locations, page]);
 
   const handleRefresh = async () => {
     setLoading(true);
+    setError("");
     try {
       const data = await refreshAqi(city);
       setCurrent(data);
       const historyData = await getHistory(city, 72);
       setHistory(historyData);
+    } catch (err) {
+      setError(err?.response?.data?.detail || "Unable to refresh live AQI data.");
     } finally {
       setLoading(false);
     }
   };
 
   const refreshPrediction = async () => {
-    const data = await getPrediction(city, horizon);
-    setPrediction(data);
+    try {
+      const data = await getPrediction(city, horizon);
+      setPrediction(data);
+    } catch (err) {
+      setError(err?.response?.data?.detail || "Unable to update live AQI prediction.");
+    }
   };
 
   const handleAsk = async (question) => {
@@ -94,10 +123,10 @@ export default function App() {
         refreshPrediction={refreshPrediction}
       />
     ),
-    map: <MapPage current={current} locations={locations} />,
+    map: <MapPage current={current} stations={stationReadings} loading={stationLoading} />,
     alerts: <Alerts alert={alert} profile={profile} setProfile={setProfile} />,
     assistant: <Assistant messages={messages} onAsk={handleAsk} current={current} />,
-    comparison: <CityComparison current={current} locations={locations} />,
+    comparison: <CityComparison current={current} readings={stationReadings} loading={stationLoading} />,
     reports: <Reports current={current} history={history} prediction={prediction} />,
     settings: <Settings city={city} locations={locations} profile={profile} horizon={horizon} />,
     about: <About />,

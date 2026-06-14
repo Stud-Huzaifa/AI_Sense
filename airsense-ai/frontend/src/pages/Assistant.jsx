@@ -4,6 +4,7 @@ import { useState } from "react";
 export default function Assistant({ messages, onAsk, current }) {
   const [question, setQuestion] = useState("");
   const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
   const prompts = [
     "Is it safe to go outside today?",
     "Why is AQI high right now?",
@@ -16,9 +17,12 @@ export default function Assistant({ messages, onAsk, current }) {
     event.preventDefault();
     if (!question.trim()) return;
     setSending(true);
+    setError("");
     try {
       await onAsk(question.trim());
       setQuestion("");
+    } catch (err) {
+      setError(err?.response?.data?.detail || "Assistant is temporarily unavailable. Please check the backend connection.");
     } finally {
       setSending(false);
     }
@@ -98,6 +102,7 @@ export default function Assistant({ messages, onAsk, current }) {
           <span>Send</span>
         </button>
       </form>
+      {error && <p className="form-error">{error}</p>}
     </section>
   );
 }

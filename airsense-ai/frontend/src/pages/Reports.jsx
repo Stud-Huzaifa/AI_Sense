@@ -12,6 +12,10 @@ export default function Reports({ current, history, prediction }) {
   const readings = history?.readings || [];
   const mostPolluted = readings.slice().sort((a, b) => b.aqi - a.aqi)[0];
   const safest = readings.slice().sort((a, b) => a.aqi - b.aqi)[0];
+  const first = readings[0];
+  const latest = readings.at(-1);
+  const trendDelta = first && latest ? latest.aqi - first.aqi : 0;
+  const trendText = trendDelta > 5 ? "AQI is rising across the available live readings." : trendDelta < -5 ? "AQI is improving across the available live readings." : "AQI is mostly stable across the available live readings.";
   const dominant = current
     ? [
         ["PM2.5", current.pm25],
@@ -29,9 +33,7 @@ export default function Reports({ current, history, prediction }) {
         <div>
           <span className="eyebrow">Environmental analytics report</span>
           <h2>Weekly AQI intelligence summary</h2>
-          <p>
-            Air quality was worse during evening hours, possibly due to traffic density and low wind movement.
-          </p>
+          <p>{trendText}</p>
         </div>
         <AqiGauge value={history?.average_aqi || current?.aqi} category="Environmental score" color={current?.color || "#22D3EE"} label="Avg AQI" />
       </section>
@@ -63,9 +65,9 @@ export default function Reports({ current, history, prediction }) {
             <FileText size={20} />
           </div>
           {[
-            ["Morning", "Dispersion improved as wind increased across the city."],
-            ["Afternoon", "Ozone and temperature signals became more visible."],
-            ["Evening", "Fine particle risk increased around traffic-heavy hours."],
+            ["Latest reading", `${current?.city || "Selected city"} is reporting AQI ${current?.aqi ?? "--"} (${current?.category || "loading"}).`],
+            ["History trend", trendText],
+            ["Forecast", `${prediction?.horizon_hours || 6}h outlook: AQI ${prediction?.predicted_aqi ?? "--"} (${prediction?.risk_level || "loading"} risk).`],
           ].map(([label, detail]) => (
             <article key={label}>
               <TimerReset size={16} />

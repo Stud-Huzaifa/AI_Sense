@@ -2,23 +2,14 @@ import "leaflet/dist/leaflet.css";
 
 import { CircleMarker, MapContainer, Popup, TileLayer, Tooltip } from "react-leaflet";
 import { MapPin, Search, ShieldAlert } from "lucide-react";
+import { useState } from "react";
 
 import AqiBadge from "../components/AqiBadge";
 
-export default function MapPage({ current, locations = [] }) {
-  const liveStation = current
-    ? {
-        id: current.id || current.city,
-        city: current.city,
-        country: current.country,
-        latitude: current.latitude,
-        longitude: current.longitude,
-        aqi: current.aqi,
-        category: current.category,
-        color: current.color,
-      }
-    : null;
-  const stations = liveStation ? [liveStation] : [];
+export default function MapPage({ current, stations = [], loading = false }) {
+  const [search, setSearch] = useState("");
+  const query = search.trim().toLowerCase();
+  const visibleStations = query ? stations.filter((station) => station.city.toLowerCase().includes(query)) : stations;
   const center = current?.latitude && current?.longitude ? [current.latitude, current.longitude] : [24.8607, 67.0011];
   const hotspots = stations.slice().sort((a, b) => b.aqi - a.aqi).slice(0, 3);
 
@@ -31,18 +22,18 @@ export default function MapPage({ current, locations = [] }) {
         </div>
         <label className="map-search">
           <Search size={16} />
-          <input placeholder="Search station..." aria-label="Search station" />
+          <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search station..." aria-label="Search station" />
         </label>
       </div>
 
       <div className="map-shell">
         <MapContainer key={current?.city || "map"} center={center} zoom={10} scrollWheelZoom className="leaflet-map">
           <TileLayer attribution="&copy; OpenStreetMap contributors" url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          {stations.map((station) => (
+          {visibleStations.map((station) => (
             <CircleMarker
               key={station.id || station.city}
               center={[station.latitude, station.longitude]}
-              radius={24}
+              radius={current?.city === station.city ? 24 : 15}
               pathOptions={{ color: station.color, fillColor: station.color, fillOpacity: 0.72, weight: 3 }}
               className="pulse-marker"
             >
@@ -52,11 +43,11 @@ export default function MapPage({ current, locations = [] }) {
                 <br />
                 AQI: {station.aqi} ({station.category})
                 <br />
-                PM2.5: {current.pm25} | PM10: {current.pm10}
+                PM2.5: {station.pm25} | PM10: {station.pm10}
               </Popup>
             </CircleMarker>
           ))}
-          {!stations.length && current && (
+          {!visibleStations.length && current && (
             <CircleMarker center={center} radius={24} pathOptions={{ color: current.color, fillColor: current.color, fillOpacity: 0.75 }}>
               <Popup>
                 <strong>{current.city}</strong>
@@ -87,7 +78,7 @@ export default function MapPage({ current, locations = [] }) {
                 </div>
               </article>
             ))}
-            {!hotspots.length && <small>Live station data will appear after the backend responds.</small>}
+            {!hotspots.length && <small>{loading ? "Loading live stations..." : "Live station data will appear after the backend responds."}</small>}
           </div>
           <div className="legend">
             <h3>Risk zones</h3>

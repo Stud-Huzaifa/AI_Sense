@@ -3,10 +3,12 @@ import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis
 
 import AqiBadge from "../components/AqiBadge";
 
-export default function CityComparison({ current }) {
-  const rows = current
-    ? [{ city: current.city, country: current.country, aqi: current.aqi, category: current.category, color: current.color }]
-    : [];
+export default function CityComparison({ current, readings = [], loading = false }) {
+  const rows = readings.length
+    ? readings
+    : current
+      ? [{ city: current.city, country: current.country, aqi: current.aqi, category: current.category, color: current.color }]
+      : [];
   const sorted = rows.slice().sort((a, b) => a.aqi - b.aqi);
   const cleanest = sorted[0];
   const polluted = sorted.at(-1);
@@ -31,7 +33,7 @@ export default function CityComparison({ current }) {
           <Award size={20} />
           <span>Average AQI</span>
           <strong>{average ?? "--"}</strong>
-          <small>Live readings only</small>
+          <small>{rows.length} live station(s)</small>
         </article>
       </section>
 
@@ -40,7 +42,7 @@ export default function CityComparison({ current }) {
           <div className="section-title">
             <div>
               <h2>City AQI comparison</h2>
-              <span>Ranking by live station response</span>
+              <span>{loading ? "Refreshing live stations" : "Ranking by live station response"}</span>
             </div>
           </div>
           <div className="chart-box">
@@ -93,7 +95,7 @@ export default function CityComparison({ current }) {
                 ))}
                 {!sorted.length && (
                   <tr>
-                    <td colSpan="4">Live AQI data will appear after the backend responds.</td>
+                    <td colSpan="4">{loading ? "Loading live AQI data..." : "Live AQI data will appear after the backend responds."}</td>
                   </tr>
                 )}
               </tbody>

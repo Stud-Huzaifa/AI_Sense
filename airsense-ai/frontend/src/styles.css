@@ -88,6 +88,12 @@ th {
   min-height: 100vh;
 }
 
+.app-shell.focus-mode {
+  --panel: rgba(255, 255, 255, 0.09);
+  --line: rgba(34, 211, 238, 0.22);
+  --muted: #cbd5e1;
+}
+
 .ambient-bg {
   position: fixed;
   inset: 0;
@@ -323,6 +329,7 @@ h2 {
 }
 
 .topbar-controls {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -391,6 +398,37 @@ h2 {
 
 .avatar-button {
   background: linear-gradient(135deg, rgba(34, 211, 238, 0.26), rgba(139, 92, 246, 0.22));
+}
+
+.top-icon.active,
+.avatar-button.active {
+  border-color: rgba(34, 211, 238, 0.48);
+  background: rgba(34, 211, 238, 0.16);
+  box-shadow: 0 0 24px rgba(34, 211, 238, 0.16);
+}
+
+.topbar-popover {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  z-index: 20;
+  display: grid;
+  gap: 8px;
+  width: min(280px, calc(100vw - 32px));
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(8, 24, 39, 0.96);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+}
+
+.topbar-popover strong {
+  color: var(--text);
+}
+
+.topbar-popover span {
+  font-size: 0.88rem;
 }
 
 .mobile-menu {
@@ -1472,6 +1510,14 @@ h2 {
 
 .send-action {
   min-width: 104px;
+}
+
+.form-error {
+  padding: 10px 12px;
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  border-radius: 8px;
+  color: #fecaca;
+  background: rgba(239, 68, 68, 0.12);
 }
 
 .summary-card {
