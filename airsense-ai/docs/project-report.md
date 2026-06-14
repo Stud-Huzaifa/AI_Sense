@@ -19,11 +19,11 @@ Urban residents often see raw pollution numbers without clear context, short-ter
 
 ## Scope
 
-The system supports demo data for offline use and WAQI live data for API-based deployments. It is built for local development, academic demonstration, and portfolio deployment.
+The system uses WAQI live data for API-based deployments. It is built for local development, academic demonstration, and portfolio deployment with real-time AQI readings.
 
 ## Existing Problem
 
-Many AQI projects are static notebooks or simple API demos. They lack persistent storage, backend APIs, usable dashboards, maps, and user-centered health guidance.
+Many AQI projects are static notebooks or simple API examples. They lack persistent storage, backend APIs, usable dashboards, maps, and user-centered health guidance.
 
 ## Proposed Solution
 
@@ -59,11 +59,11 @@ The React UI uses a dashboard layout with a sidebar, city selector, AQI summary,
 
 ## Results
 
-In demo mode, the app generates realistic hourly AQI data and supports all required features without API keys. When a trained model exists, predictions use the Joblib artifact; otherwise, a heuristic fallback keeps the feature available.
+In live mode, the app fetches current WAQI readings and stores them for history and prediction workflows. When a trained model exists, predictions use the Joblib artifact; otherwise, a heuristic prediction keeps the feature available.
 
 ## Limitations
 
-- Demo data is synthetic.
+- WAQI token availability and API rate limits affect live data access.
 - WAQI coverage depends on available city stations.
 - The assistant is rule-based and not a generative LLM.
 - SQLite is intended for local development rather than high-scale production.
@@ -79,4 +79,3 @@ In demo mode, the app generates realistic hourly AQI data and supports all requi
 ## Conclusion
 
 AirSense AI turns AQI readings into a complete environmental intelligence workflow with monitoring, storage, forecasting, visualization, and actionable health guidance.
-

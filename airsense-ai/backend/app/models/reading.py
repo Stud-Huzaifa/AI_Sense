@@ -24,7 +24,6 @@ class AirQualityReading(Base):
     temperature: Mapped[float] = mapped_column(Float)
     humidity: Mapped[float] = mapped_column(Float)
     wind_speed: Mapped[float] = mapped_column(Float)
-    source: Mapped[str] = mapped_column(String(40), default="demo")
+    source: Mapped[str] = mapped_column(String(40), default="waqi")
     recorded_at: Mapped[datetime] = mapped_column(DateTime, index=True, default=datetime.utcnow)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
-

@@ -22,14 +22,15 @@ That is it.
 
 ## Settings
 
-The app runs in demo mode by default:
+The app runs in live WAQI mode:
 
 ```env
-DEMO_MODE=true
+DEMO_MODE=false
+WAQI_TOKEN=<set in Render environment>
 DATABASE_URL=sqlite:///./airsense.db
 ```
 
-No external database and no API token are required.
+No external database is required. A WAQI token is required because demo data fallback is disabled.
 
 ## Check After Deploy
 

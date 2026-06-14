@@ -30,7 +30,7 @@ export default function Dashboard({ current, history, prediction, loading, onRef
           <p>{current?.recommendation || "Current AQI data is loading from the monitoring service."}</p>
           <div className="hero-meta-row">
             <small>Last updated {current ? new Date(current.recorded_at).toLocaleString() : "--"}</small>
-            <small>{current?.source === "waqi" ? "Live WAQI station" : "Demo environmental data"}</small>
+            <small>Live WAQI station</small>
             <small>Risk level: {current?.risk_level || "--"}</small>
           </div>
         </div>

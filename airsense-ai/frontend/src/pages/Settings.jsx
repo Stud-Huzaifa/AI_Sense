@@ -7,7 +7,7 @@ export default function Settings({ city, locations = [], profile, horizon }) {
         <div className="section-title">
           <div>
             <h2>Application settings</h2>
-            <span>Configured for AirSense AI demo operations</span>
+            <span>Configured for live WAQI operations</span>
           </div>
         </div>
         <div className="settings-list">

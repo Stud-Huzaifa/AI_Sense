@@ -13,6 +13,8 @@ services:
         value: production
       - key: DEMO_MODE
         value: false
+      - key: WAQI_TOKEN
+        sync: false
       - key: DATABASE_URL
         value: sqlite:///./airsense.db
       - key: CORS_ORIGINS

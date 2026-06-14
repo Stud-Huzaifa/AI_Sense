@@ -6,13 +6,13 @@ export default function About() {
         <span>Full-stack environmental intelligence</span>
       </div>
       <p>
-        AirSense AI combines FastAPI, SQLAlchemy, SQLite, demo or WAQI data, a Random Forest AQI prediction pipeline,
+        AirSense AI combines FastAPI, SQLAlchemy, SQLite, live WAQI data, a Random Forest AQI prediction pipeline,
         React dashboards, Recharts, Leaflet maps, and a rule-based assistant.
       </p>
       <div className="about-grid">
         <article>
           <strong>Backend</strong>
-          <span>FastAPI APIs, health rules, database models, demo seeding, live WAQI mode.</span>
+          <span>FastAPI APIs, health rules, database models, and live WAQI mode.</span>
         </article>
         <article>
           <strong>Machine learning</strong>
@@ -26,4 +26,3 @@ export default function About() {
     </section>
   );
 }
-

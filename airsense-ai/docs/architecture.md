@@ -7,7 +7,7 @@ AirSense AI is divided into a FastAPI backend, a React frontend, a SQLite databa
 ## Backend Flow
 
 1. API routes receive city, profile, and horizon parameters.
-2. `reading_service` decides whether to use demo data or live WAQI data.
+2. `reading_service` fetches live WAQI data and stores each reading.
 3. Readings are normalized and stored in SQLAlchemy models.
 4. AQI rules classify risk and produce recommendations.
 5. Prediction service loads `aqi_model.joblib` when available and falls back to a transparent heuristic when no trained model exists.
@@ -33,4 +33,3 @@ AirSense AI is divided into a FastAPI backend, a React frontend, a SQLite databa
 ## Deployment
 
 Local development uses SQLite and Vite. Docker Compose builds backend and frontend services. The SQLAlchemy database URL can be changed to PostgreSQL for production.
-

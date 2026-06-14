@@ -18,7 +18,7 @@ class ReadingBase(BaseModel):
     temperature: float
     humidity: float
     wind_speed: float
-    source: str = "demo"
+    source: str = "waqi"
     recorded_at: datetime
 
 

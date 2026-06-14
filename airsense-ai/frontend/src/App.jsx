@@ -107,7 +107,7 @@ export default function App() {
     <Layout page={page} setPage={setPage} city={city} setCity={setCity} locations={locations}>
       {error && (
         <div className="error-banner" role="status">
-          Live AQI data is temporarily unavailable. Showing demo environmental data when available.
+          Live AQI data is temporarily unavailable. Please check the backend service and WAQI token.
           <span>{error}</span>
         </div>
       )}

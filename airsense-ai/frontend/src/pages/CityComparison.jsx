@@ -2,18 +2,15 @@ import { Award, Factory, Leaf } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import AqiBadge from "../components/AqiBadge";
-import { citySeed, getAqiMeta } from "../components/aqi";
 
-export default function CityComparison({ current, locations = [] }) {
-  const rows = (locations.length ? locations : [{ city: current?.city || "Karachi", country: "Pakistan" }]).map((location) => {
-    const aqi = current?.city === location.city ? current?.aqi || 0 : citySeed(location.city, 44);
-    const meta = getAqiMeta(aqi, current?.city === location.city ? current?.category : null, current?.city === location.city ? current?.color : null);
-    return { ...location, aqi, category: meta.label, color: meta.color };
-  });
+export default function CityComparison({ current }) {
+  const rows = current
+    ? [{ city: current.city, country: current.country, aqi: current.aqi, category: current.category, color: current.color }]
+    : [];
   const sorted = rows.slice().sort((a, b) => a.aqi - b.aqi);
   const cleanest = sorted[0];
   const polluted = sorted.at(-1);
-  const average = Math.round(rows.reduce((sum, row) => sum + row.aqi, 0) / Math.max(rows.length, 1));
+  const average = rows.length ? Math.round(rows.reduce((sum, row) => sum + row.aqi, 0) / rows.length) : null;
 
   return (
     <div className="page-stack">
@@ -33,8 +30,8 @@ export default function CityComparison({ current, locations = [] }) {
         <article className="summary-card ai">
           <Award size={20} />
           <span>Average AQI</span>
-          <strong>{average || "--"}</strong>
-          <small>Across monitored cities</small>
+          <strong>{average ?? "--"}</strong>
+          <small>Live readings only</small>
         </article>
       </section>
 
@@ -43,7 +40,7 @@ export default function CityComparison({ current, locations = [] }) {
           <div className="section-title">
             <div>
               <h2>City AQI comparison</h2>
-              <span>Ranking by monitored station</span>
+              <span>Ranking by live station response</span>
             </div>
           </div>
           <div className="chart-box">
@@ -94,6 +91,11 @@ export default function CityComparison({ current, locations = [] }) {
                     </td>
                   </tr>
                 ))}
+                {!sorted.length && (
+                  <tr>
+                    <td colSpan="4">Live AQI data will appear after the backend responds.</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

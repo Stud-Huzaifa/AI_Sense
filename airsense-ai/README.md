@@ -5,7 +5,6 @@ AirSense AI is a full-stack AI-powered environmental intelligence platform that 
 ## Features
 
 - Current AQI dashboard with pollutants, weather, wind, category, and health recommendation.
-- Demo data mode that works without API keys.
 - Live WAQI mode through `DEMO_MODE=false` and `WAQI_TOKEN`.
 - SQLite database with users, locations, readings, predictions, alerts, and chatbot messages.
 - Historical AQI trend chart, pollutant comparison, recent readings table, highest, lowest, and average AQI.
@@ -69,7 +68,6 @@ Backend:
 ```bash
 cd backend
 pip install -r requirements.txt
-python -m app.scripts.seed_demo_data
 python -m app.scripts.train_model
 uvicorn app.main:app --reload
 ```
@@ -119,14 +117,14 @@ Press `Ctrl+C` in the same terminal to stop both servers. Logs are written to `.
 APP_NAME=AirSense AI
 APP_ENV=development
 DATABASE_URL=sqlite:///./airsense.db
-DEMO_MODE=true
-WAQI_TOKEN=
+DEMO_MODE=false
+WAQI_TOKEN=replace-with-your-waqi-token
 SECRET_KEY=change-me-in-production
 CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 VITE_API_BASE_URL=http://localhost:8000
 ```
 
-Use `DEMO_MODE=true` for generated data. Use `DEMO_MODE=false` with a WAQI token for live city data.
+The app is configured for live WAQI data. Set `WAQI_TOKEN` locally and in Render before starting the backend.
 
 ## API Endpoints
 
@@ -173,6 +171,8 @@ Default service URLs:
 - Health check: `https://airsense-ai.onrender.com/health`
 
 The Docker build compiles the React frontend and serves it from FastAPI, so there is no separate frontend service or external database to configure. See `docs/render-deployment.md`.
+
+Render requires `WAQI_TOKEN` as an environment variable because demo data fallback is disabled.
 
 ## Screenshots
 

@@ -4,17 +4,21 @@ import { CircleMarker, MapContainer, Popup, TileLayer, Tooltip } from "react-lea
 import { MapPin, Search, ShieldAlert } from "lucide-react";
 
 import AqiBadge from "../components/AqiBadge";
-import { citySeed, getAqiMeta } from "../components/aqi";
-
-function stationFor(location, current) {
-  if (current?.city === location.city) return { ...location, aqi: current.aqi, category: current.category, color: current.color };
-  const aqi = citySeed(location.city, 45);
-  const meta = getAqiMeta(aqi);
-  return { ...location, aqi, category: meta.label, color: meta.color };
-}
 
 export default function MapPage({ current, locations = [] }) {
-  const stations = locations.length ? locations.map((location) => stationFor(location, current)) : [];
+  const liveStation = current
+    ? {
+        id: current.id || current.city,
+        city: current.city,
+        country: current.country,
+        latitude: current.latitude,
+        longitude: current.longitude,
+        aqi: current.aqi,
+        category: current.category,
+        color: current.color,
+      }
+    : null;
+  const stations = liveStation ? [liveStation] : [];
   const center = current?.latitude && current?.longitude ? [current.latitude, current.longitude] : [24.8607, 67.0011];
   const hotspots = stations.slice().sort((a, b) => b.aqi - a.aqi).slice(0, 3);
 
@@ -38,7 +42,7 @@ export default function MapPage({ current, locations = [] }) {
             <CircleMarker
               key={station.id || station.city}
               center={[station.latitude, station.longitude]}
-              radius={current?.city === station.city ? 24 : 16}
+              radius={24}
               pathOptions={{ color: station.color, fillColor: station.color, fillOpacity: 0.72, weight: 3 }}
               className="pulse-marker"
             >
@@ -47,12 +51,8 @@ export default function MapPage({ current, locations = [] }) {
                 <strong>{station.city}</strong>
                 <br />
                 AQI: {station.aqi} ({station.category})
-                {current?.city === station.city && (
-                  <>
-                    <br />
-                    PM2.5: {current.pm25} | PM10: {current.pm10}
-                  </>
-                )}
+                <br />
+                PM2.5: {current.pm25} | PM10: {current.pm10}
               </Popup>
             </CircleMarker>
           ))}
@@ -78,7 +78,7 @@ export default function MapPage({ current, locations = [] }) {
           </div>
           <div className="hotspot-list">
             <h3>Hotspots</h3>
-            {(hotspots.length ? hotspots : [{ city: current?.city || "Karachi", aqi: current?.aqi || 0, color: current?.color }]).map((station) => (
+            {hotspots.map((station) => (
               <article key={station.city}>
                 <span style={{ "--dot": station.color }} />
                 <div>
@@ -87,6 +87,7 @@ export default function MapPage({ current, locations = [] }) {
                 </div>
               </article>
             ))}
+            {!hotspots.length && <small>Live station data will appear after the backend responds.</small>}
           </div>
           <div className="legend">
             <h3>Risk zones</h3>

@@ -6,7 +6,7 @@ Base URL: `http://localhost:8000`
 
 `GET /health`
 
-Returns backend status and demo mode state.
+Returns backend status and live data mode state.
 
 ## Current AQI
 
@@ -82,4 +82,3 @@ Body:
   "longitude": 67.0011
 }
 ```
-
