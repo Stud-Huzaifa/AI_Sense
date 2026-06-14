@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, Query
+import httpx
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
@@ -10,12 +11,18 @@ router = APIRouter(prefix="/aqi", tags=["AQI"])
 
 @router.get("/current", response_model=ReadingResponse)
 def current_aqi(city: str = Query("Karachi"), db: Session = Depends(get_db)):
-    return reading_to_dict(get_current_reading(db, city))
+    try:
+        return reading_to_dict(get_current_reading(db, city))
+    except (ValueError, httpx.HTTPError) as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
 
 
 @router.post("/refresh", response_model=ReadingResponse)
 def refresh_aqi(city: str = Query("Karachi"), db: Session = Depends(get_db)):
-    return reading_to_dict(fetch_and_save_current(db, city))
+    try:
+        return reading_to_dict(fetch_and_save_current(db, city))
+    except (ValueError, httpx.HTTPError) as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
 
 
 @router.get("/history", response_model=HistoryResponse)
@@ -24,7 +31,10 @@ def aqi_history(
     limit: int = Query(72, ge=1, le=500),
     db: Session = Depends(get_db),
 ):
-    readings = [reading_to_dict(item) for item in get_history(db, city, limit)]
+    try:
+        readings = [reading_to_dict(item) for item in get_history(db, city, limit)]
+    except (ValueError, httpx.HTTPError) as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
     values = [item["aqi"] for item in readings]
     return {
         "city": readings[-1]["city"] if readings else city,
@@ -44,4 +54,7 @@ def aqi_prediction(
 ):
     from app.ml.predictor import predict_aqi
 
-    return predict_aqi(db, city, horizon_hours)
+    try:
+        return predict_aqi(db, city, horizon_hours)
+    except (ValueError, httpx.HTTPError) as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc

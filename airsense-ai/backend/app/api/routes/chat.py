@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends
+import httpx
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
@@ -85,8 +86,11 @@ def build_answer(question: str, reading, profile: str, history: list) -> str:
 
 @router.post("/ask", response_model=ChatResponse)
 def ask_assistant(payload: ChatRequest, db: Session = Depends(get_db)):
-    reading = get_current_reading(db, payload.city)
-    history = get_history(db, payload.city, 24)
+    try:
+        reading = get_current_reading(db, payload.city)
+        history = get_history(db, payload.city, 24)
+    except (ValueError, httpx.HTTPError) as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
     context = build_air_quality_insights(reading, payload.profile, history)
     answer = build_answer(payload.question, reading, payload.profile, history)
     advice = generate_health_advice(reading.aqi, payload.profile)

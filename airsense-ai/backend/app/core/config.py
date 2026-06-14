@@ -25,8 +25,6 @@ class Settings:
         self.waqi_token = getenv("WAQI_TOKEN", "")
         self.secret_key = getenv("SECRET_KEY", "change-me-in-production")
         self.cors_origins = getenv("CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173")
-        if not self.demo_mode and not self.waqi_token:
-            raise ValueError("WAQI_TOKEN is required because DEMO_MODE=false.")
 
     @property
     def cors_origin_list(self) -> list[str]:

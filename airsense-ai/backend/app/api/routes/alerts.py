@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, Query
+import httpx
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
@@ -14,5 +15,7 @@ def health_alert(
     profile: str = Query("general"),
     db: Session = Depends(get_db),
 ):
-    return create_health_alert(db, city, profile)
-
+    try:
+        return create_health_alert(db, city, profile)
+    except (ValueError, httpx.HTTPError) as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc

@@ -39,7 +39,13 @@ app.include_router(locations.router)
 
 @app.get("/health")
 def health_check():
-    return {"status": "ok", "app": settings.app_name, "environment": settings.app_env, "data_mode": "live-waqi"}
+    return {
+        "status": "ok",
+        "app": settings.app_name,
+        "environment": settings.app_env,
+        "data_mode": "live-waqi",
+        "waqi_token_configured": bool(settings.waqi_token),
+    }
 
 
 if (static_dir / "assets").exists():
